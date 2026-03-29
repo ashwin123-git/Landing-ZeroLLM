@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZeroLLM — Open Source AI</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  body { font-family: 'Syne', sans-serif; background: #080b10; color: #e8edf2; }
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image:
+      linear-gradient(rgba(0,255,136,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,255,136,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none; z-index: 0;
+  }
+  .mono { font-family: 'Space Mono', monospace; }
+  .glow { text-shadow: 0 0 40px rgba(0,255,136,0.4); }
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  .a1{animation:fadeDown 0.6s ease both}
+  .a2{animation:fadeDown 0.6s ease 0.1s both}
+  .a3{animation:fadeDown 0.6s ease 0.2s both}
+  .a4{animation:fadeDown 0.6s ease 0.3s both}
+  .pdot{animation:pulse 2s infinite}
+</style>
+</head>
+<body class="min-h-screen overflow-x-hidden">
+
+<nav class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 py-5 border-b border-white/5" style="background:rgba(8,11,16,0.85);backdrop-filter:blur(12px)">
+  <span class="mono text-lg" style="color:#00ff88">Zero<span style="color:#e8edf2">LLM</span></span>
+  <div class="flex items-center gap-6">
+    <a href="https://github.com/ashwin123-git/ZeroLLM" target="_blank" class="text-sm font-semibold text-gray-400 hover:text-white transition-colors">GitHub</a>
+    <a href="https://huggingface.co/ash123ash" target="_blank" class="text-sm font-semibold text-gray-400 hover:text-white transition-colors">HuggingFace</a>
+    <a href="https://instagram.com/corrupted.sh" target="_blank" class="text-sm font-semibold text-gray-400 hover:text-white transition-colors">Instagram</a>
+  </div>
+</nav>
+
+<section class="relative z-10 min-h-screen flex flex-col items-center justify-center text-center px-6 pt-24 pb-16">
+  <div class="a1 inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs mono mb-8" style="background:rgba(0,255,136,0.08);border:1px solid rgba(0,255,136,0.2);color:#00ff88">
+    <span class="pdot w-2 h-2 rounded-full inline-block" style="background:#00ff88"></span>
+    Open Source · GNU GPL · Free Forever
+  </div>
+
+  <h1 class="a2 font-extrabold leading-none mb-6" style="font-size:clamp(56px,9vw,108px);letter-spacing:-4px">
+    <span style="color:#e8edf2">Zero</span><span class="glow" style="color:#00ff88">LLM</span>
+  </h1>
+
+  <p class="a3 text-lg max-w-xl mx-auto mb-4" style="color:#556070;line-height:1.8">
+    A <strong style="color:#e8edf2">fine-tuned open source AI</strong> with real-time web search, code generation, and document understanding. Built from scratch. Free forever.
+  </p>
+
+  <div class="a3 flex flex-wrap justify-center gap-3 mb-12 text-xs mono" style="color:#556070">
+    <span style="color:#00ff88">✓</span> TinyLlama 1.1B &nbsp;
+    <span style="color:#00ff88">✓</span> RAG Pipeline &nbsp;
+    <span style="color:#00ff88">✓</span> Code Generation &nbsp;
+    <span style="color:#00ff88">✓</span> File Uploads &nbsp;
+    <span style="color:#00ff88">✓</span> Chat History
+  </div>
+
+  <div class="a4 w-full max-w-md">
+    <div id="form-box" class="rounded-2xl p-6" style="background:#0d1117;border:1px solid #1e2733">
+      <h2 class="text-lg font-bold mb-1">Join the Waitlist</h2>
+      <p class="text-sm mb-5" style="color:#556070">Max 2,000 spots per country. Be early.</p>
+
+      <div class="flex flex-col gap-3">
+        <input id="inp-name" type="text" placeholder="Your name"
+          class="w-full px-4 py-3 rounded-lg text-sm outline-none"
+          style="background:#080b10;border:1px solid #1e2733;color:#e8edf2;font-family:Syne,sans-serif"
+          onfocus="this.style.borderColor='rgba(0,255,136,0.4)'"
+          onblur="this.style.borderColor='#1e2733'"/>
+
+        <input id="inp-email" type="email" placeholder="Your email"
+          class="w-full px-4 py-3 rounded-lg text-sm outline-none"
+          style="background:#080b10;border:1px solid #1e2733;color:#e8edf2;font-family:Syne,sans-serif"
+          onfocus="this.style.borderColor='rgba(0,255,136,0.4)'"
+          onblur="this.style.borderColor='#1e2733'"/>
+
+        <select id="inp-country"
+          class="w-full px-4 py-3 rounded-lg text-sm outline-none"
+          style="background:#080b10;border:1px solid #1e2733;color:#e8edf2;font-family:Syne,sans-serif">
+          <option value="">Select your country</option>
+          <option>India</option><option>United States</option><option>United Kingdom</option>
+          <option>Germany</option><option>France</option><option>Canada</option>
+          <option>Australia</option><option>Brazil</option><option>Japan</option>
+          <option>South Korea</option><option>Netherlands</option><option>Sweden</option>
+          <option>Singapore</option><option>UAE</option><option>Other</option>
+        </select>
+
+        <button onclick="joinWaitlist()"
+          class="w-full py-3 rounded-lg text-sm font-bold transition-opacity hover:opacity-85"
+          style="background:#00ff88;color:#000">
+          Join Waitlist →
+        </button>
+      </div>
+
+      <div id="msg" class="mt-4 text-sm hidden"></div>
+    </div>
+  </div>
+
+  <!-- features -->
+  <div class="a4 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto mt-16 w-full">
+    <div class="rounded-xl p-4 text-left" style="background:#0d1117;border:1px solid #1e2733">
+      <div class="text-xl mb-2">🔍</div>
+      <div class="font-bold text-sm mb-1">Web Search</div>
+      <div class="text-xs" style="color:#556070">Real-time RAG pipeline for current info</div>
+    </div>
+    <div class="rounded-xl p-4 text-left" style="background:#0d1117;border:1px solid #1e2733">
+      <div class="text-xl mb-2">💻</div>
+      <div class="font-bold text-sm mb-1">Code Gen</div>
+      <div class="text-xs" style="color:#556070">Write, explain and debug code</div>
+    </div>
+    <div class="rounded-xl p-4 text-left" style="background:#0d1117;border:1px solid #1e2733">
+      <div class="text-xl mb-2">📁</div>
+      <div class="font-bold text-sm mb-1">File Uploads</div>
+      <div class="text-xs" style="color:#556070">Analyze any document or file</div>
+    </div>
+    <div class="rounded-xl p-4 text-left" style="background:#0d1117;border:1px solid #1e2733">
+      <div class="text-xl mb-2">🌍</div>
+      <div class="font-bold text-sm mb-1">Open Source</div>
+      <div class="text-xs" style="color:#556070">GNU GPL · free forever</div>
+    </div>
+  </div>
+</section>
+
+<footer class="relative z-10 text-center py-8 text-xs mono" style="color:#556070;border-top:1px solid #1e2733">
+  ZeroLLM · Built by <a href="https://github.com/ashwin123-git" style="color:#00ff88">ash123ash</a> · GNU GPL v3
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<script>
+  const SUPABASE_URL = 'https://xtzyzwdridfrtjurfewy.supabase.co'
+  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh0enl6d2RyaWRmcnRqdXJmZXd5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ3MDg0MzIsImV4cCI6MjA5MDI4NDQzMn0._deKzw742hHBd8SmVAzG4SxO42HmrWf797YGZ1V-Wws'
+  const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
+  emailjs.init('uf5Vu9BcipbwrQnbY')
+
+  async function joinWaitlist() {
+    const name = document.getElementById('inp-name').value.trim()
+    const email = document.getElementById('inp-email').value.trim()
+    const country = document.getElementById('inp-country').value
+    const msg = document.getElementById('msg')
+
+    if (!name || !email || !country) {
+      showMsg('Please fill in all fields!', '#ff4466')
+      return
+    }
+
+    const { count } = await sb.from('waitlist').select('*', { count: 'exact', head: true }).eq('country', country)
+    if (count >= 2000) {
+      showMsg(`Sorry! ${country} is full (2000/2000). Try "Other".`, '#ff4466')
+      return
+    }
+
+    const { data: existing } = await sb.from('waitlist').select('queue_number').eq('email', email).single()
+    if (existing) {
+      showMsg(`Already on waitlist! Queue #${existing.queue_number} 🎉`, '#00ff88')
+      return
+    }
+
+    const { count: total } = await sb.from('waitlist').select('*', { count: 'exact', head: true })
+    const queue_number = (total || 0) + 1
+
+    const { error } = await sb.from('waitlist').insert({ name, email, country, queue_number })
+    if (error) {
+      showMsg('Something went wrong. Try again!', '#ff4466')
+      return
+    }
+
+    await emailjs.send('service_oq80fqh', 'template_rp75lky', {
+      name: name,
+      email: email,
+      country: country,
+      queue_number: queue_number,
+      to_email: email
+    })
+
+    document.getElementById('form-box').innerHTML = `
+      <div class="py-4">
+        <div class="text-4xl mb-4">🎉</div>
+        <h2 class="text-xl font-bold mb-2" style="color:#00ff88">You're in!</h2>
+        <p class="text-sm mb-4" style="color:#556070">Welcome, <strong style="color:#e8edf2">${name}</strong></p>
+        <div class="rounded-xl py-4 px-6 mb-4" style="background:#080b10;border:1px solid rgba(0,255,136,0.2)">
+          <div class="text-xs mono mb-1" style="color:#556070">your queue number</div>
+          <div class="text-5xl font-extrabold mono" style="color:#00ff88">#${queue_number}</div>
+        </div>
+        <p class="text-xs" style="color:#556070">Confirmation sent to <strong style="color:#e8edf2">${email}</strong></p>
+      </div>
+    `
+  }
+
+  function showMsg(text, color) {
+    const msg = document.getElementById('msg')
+    msg.textContent = text
+    msg.style.color = color
+    msg.classList.remove('hidden')
+  }
+</script>
+</body>
+</html>
